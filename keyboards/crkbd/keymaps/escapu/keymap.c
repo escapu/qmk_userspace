@@ -38,7 +38,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+-----------+-----------+-----------+-----------+--------|                    |----------+-----------+---------+-----------+------------+--------|
       XXXXXXX, A(KC_LEFT), C(KC_LEFT), C(KC_RGHT), A(KC_RGHT), KC_WH_U,                        KC_PGUP,    KC_LEFT,    KC_UP,    KC_DOWN,    KC_RIGHT,  KC_PGDN,
   //|--------+-----------+-----------+-----------+-----------+--------|                    |----------+-----------+---------+-----------+------------+--------|
-      XXXXXXX,    KC_UNDO,     KC_CUT,    KC_COPY,   KC_PASTE, KC_WH_D,                     KC_MS_BTN1, KC_MS_LEFT, KC_MS_UP, KC_MS_DOWN, KC_MS_RIGHT, KC_MS_BTN2,
+       KC_ENT,    KC_UNDO,     KC_CUT,    KC_COPY,   KC_PASTE, KC_WH_D,                     KC_MS_BTN1, KC_MS_LEFT, KC_MS_UP, KC_MS_DOWN, KC_MS_RIGHT, KC_MS_BTN2,
   //|--------+-----------+-----------+-----------+-----------+--------+--------|  |--------+----------+-----------+---------+-----------+------------+--------|
                                                        KC_LSFT, _______, KC_DEL,     KC_ENT, KC_SPACE,   MO(3)
                                                   //`--------------------------'  `--------------------------'
@@ -50,7 +50,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_TILD,  KC_GRV,                      KC_MINS,  KC_EQL, KC_LBRC, KC_RBRC, KC_NUBS,  KC_NUHS,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, KC_UNDO, KC_CUT, KC_COPY, KC_PASTE, KC_BSLS,                      KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE, KC_TILD,
+       KC_ENT, KC_UNDO, KC_CUT, KC_COPY, KC_PASTE, KC_BSLS,                      KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE, KC_TILD,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           KC_LSFT,   MO(3), KC_BSPC,     KC_ENT, KC_SPACE, _______
                                       //`--------------------------'  `--------------------------'
@@ -83,10 +83,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 const key_override_t delete_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_DEL, KC_BSPC); // shift + del = backspace
 const key_override_t backspace_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_BSPC, KC_DEL); // shift + backspace = del
+const key_override_t space_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_SPC, KC_ENT); // shift + space = enter
 
 // This globally defines all key overrides to be used
 const key_override_t **key_overrides = (const key_override_t *[]){
 	&delete_key_override,
 	&backspace_key_override,
+	&space_key_override,
 	NULL // Null terminate the array of overrides!
 };
