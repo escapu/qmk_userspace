@@ -123,7 +123,7 @@ const key_override_t **key_overrides = (const key_override_t *[]){
 //        rgblight_sethsv_noeeprom (HSV_BLUE);
 //        break;
 //    case 4 :
-//        rgblight_sethsv_noeeprom (HSV_YELLOW);
+//        rgblight_sethsv_noeeprom (HSV_TURQUOISE);
 //        break;
 //    case 5 :
 //        rgblight_sethsv_noeeprom (HSV_YELLOW);

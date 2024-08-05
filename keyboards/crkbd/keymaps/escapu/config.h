@@ -34,9 +34,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SPLIT_WPM_ENABLE // Ensures the current WPM is available on the slave when using the QMK-provided split transport.
 #define SPLIT_LED_STATE_ENABLE // Ensures the current host indicator state (caps/num/scroll) is available on the slave when using the QMK-provided split transport.
 #define SPLIT_LAYER_STATE_ENABLE // Ensures the current layer state is available on the slave when using the QMK-provided split transport.
-
-
-
+#define SPLIT_MODS_ENABLE // Ensures the current modifier state (normal, weak, and oneshot) is available on the slave when using the QMK-provided split transport.
+#define SPLIT_USB_DETECT
 
 
 
