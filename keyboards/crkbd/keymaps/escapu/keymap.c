@@ -20,6 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "bongocat.h"
 #include "bongocat.c"
 
+enum custom_keycodes {
+    NO_SLEEP = SAFE_RANGE,
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT_split_3x6_3(
   //,---------------------------------------------------------------------------.                    ,-------------------------------------------------------------------------.
@@ -72,7 +76,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [4] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, NO_SLEEP,                     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX, RGB_TOG, RGB_HUI, RGB_SAI, RGB_VAI, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -94,6 +98,39 @@ const key_override_t **key_overrides = (const key_override_t *[]){
 	&space_key_override,
 	NULL // Null terminate the array of overrides!
 };
+
+//#define SCREENSAVE_DELAY 10000 // 10 sec
+#define SCREENSAVE_DELAY 240000 // 4 mins
+
+bool stop_screensaver = false;
+uint32_t last_activity_timer = 0;
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+    if (record->event.pressed){
+        last_activity_timer = timer_read32();  // Reset last_activity_timer
+    }
+
+    switch (keycode) {
+        case NO_SLEEP:  // When you press custom NO_SLEEP keycode
+        if (record->event.pressed) {
+            stop_screensaver = !stop_screensaver;  // Toggle stop_screensaver
+            last_activity_timer = timer_read32(); // Reset timer
+        }
+        break;
+        }
+        return true;
+}
+
+void matrix_scan_user(void){
+    if (stop_screensaver) {
+        // Check if it's been SCREENSAVE_DELAY milliseconds since the last spam
+        if (timer_elapsed32(last_activity_timer) > SCREENSAVE_DELAY) {
+            tap_code(KC_F13);           // Send an F13 keystroke
+            last_activity_timer = timer_read32();  // Reset last_activity_timer
+        }
+    }
+}
 
 //
 //layer_state_t layer_state_set_user(layer_state_t state) {
@@ -188,6 +225,20 @@ static void render_status(void) {
             oled_write_P(PSTR("  ?\n"), false);
     }
 
+    oled_write_P(PSTR("\n"), false);
+
+    if (stop_screensaver) {
+        oled_write_P(PSTR("SSS:Y"), false);
+        uint32_t val = (SCREENSAVE_DELAY - (timer_elapsed32(last_activity_timer)))/1000;
+        char str[10];
+        sprintf( str, "%lu", val );
+        oled_write(PSTR("T:"), false);
+        oled_write_P(PSTR(str), false);
+
+    } else {
+        oled_write_P(PSTR("SSS:N"), false);
+        oled_write_P(PSTR("\n"), false);
+    }
 }
 
 //
